@@ -1,0 +1,17 @@
+graph G {
+
+    node [shape=doublecircle,label="OpenStack Swift",style=filled,color=lightblue] os;
+    node [shape=doubleoctagon,label="GlusterFS"] gluster;
+    node [shape=doubleoctagon,label="XFS"] xfs;
+    node [shape=doubleoctagon,label="NFS"] nfs;
+    node [shape=box,label="swiftonfile",color=coral1] sof_gluster; sof_xfs; sof_nfs;
+
+    os -- sof_gluster;
+    os -- sof_xfs;
+    os -- sof_nfs;
+
+    sof_gluster -- gluster;
+    sof_xfs -- xfs;
+    sof_nfs -- nfs;
+
+}
