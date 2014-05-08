@@ -1,20 +1,13 @@
 <!doctype html>
-<!--
-**
-**
-** The following presentation is here as an example
-**
-**
--->
 <html lang="en">
 
 	<head>
 		<meta charset="utf-8">
 
-		<title>Unit tests in GlusterFS - Feb 24 2014 - Luis Pab&oacute;n</title>
-
-        <meta name="description" content="Unit tests">
+		<title>Breaking the mold with OpenStack Swift and GlusterFS</title>
+        <meta name="description" content="OpenStack Summit">
 		<meta name="author" content="Luis Pab&oacute;n">
+        <meta name="author" content="John Dickinson">
 
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -43,328 +36,191 @@
 
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
-			    <section>
-			        <h1>Test</h1>
-                    <h1>Methodologies</h1>
-                    <h1>in C</h1>
-			        <h5>February 24, 2014</h5>
-                    <h6>Luis Pab&oacute;n</h6>
-			    </section>
                 <section>
-                    <h3 class="fragment">Introduction to programming by contract</h3>
-                    <h3 class="fragment">Introduction to unit testing</h3>
-                    <h3 class="fragment">Unit testing in C</h3>
-                    <h3 class="fragment">Lab</h3>
+                    <h1>Breaking the Mold:</h1>
+                    <h1>OpenStack Swift</h1>
+                    <h1>+</h1>
+                    <h1>GlusterFS</h1>
                 </section>
 
-                <!-- PBC -->
                 <section>
-                    <h1>Programming</h1>
-                    <h1>by</h1>
-                    <h1>Contract</h1>
-                </section>
-                <section>
-                    <h1>What is programming by contract?</h1>
-                </section>
-                <section>
-                    <h3>Programming by Contract</h3>
-                    <p>We implement programming (or design) by contract as a
-                    Hoare Triple:
-                    </p>
-                    <h2>{P} C {Q}</h2>
-                    <p>where <i>{P}</i> is the precondition before executing
-                    command <i>C</i>, and <i>{Q}</i> is the postcondition.
-                    </p>
-                </section>
-                <section>
-                    <h3>PBC C language Semantics</h3>
-                    <ul>
-                        <li>REQUIRE() - Function precondition</li>
-                        <li>ENSURE() - Function postcondition</li>
-                        <li>INVARIANT() - Test object consistancy</li>
-                    </ul>
+                    <h2>John Dickinson</h2>
+                    <h3>PTL, OpenStack Swift</h3>
+                    <h3>Director of Technology, SwiftStack</h3>
+                    <br />
                     <p />
-                    <p>These semantics should only be enabled during debug builds</p>
-                </section>
-                <section>
-                    <h1>Example:</h1>
-                    <h1>GlusterFS dict</h1>
-                </section>
-                <section>
-                    <h3>Let's look at <code>_dict_set()</code></h3>
-                    <pre><code contenteditable language="c"> static int32_t
-_dict_set (dict_t *this, char *key, data_t *value, gf_boolean_t replace) {
-    ...
-}
-                    </code></pre>
-                </section>
-                <section>
-                    <h4>With PBC</h4>
-                    <pre><code contenteditable language="c"> static int32_t
-_dict_set (dict_t *this, char *key, data_t *value, gf_boolean_t replace) {
-    REQUIRE(key != NULL);
-    REQUIRE(this != NULL);
-    REQUIRE(value != NULL);
-    REQUIRE(1000000 &gt; strlen(key));
-    REQUIRE((_gf_false == replace) || (_gf_true == replace));
-    REQUIRE(NULL != THIS);
-    REQUIRE(NULL != THIS-&gt;ctx);
-    REQUIRE(NULL != THIS-&gt;ctx-&gt;dict_pair_pool);
-    INVARIANT(_dict_invariant(this));
-    ...
-    INVARIANT(_dict_invariant(this));
-    ENSURE(NULL != _dict_lookup(this, key));
-}
-                    </code></pre>
-                </section>
-                <section>
-                    <h4><code>_dict_invariant()</code></h4>
-                    <pre><code contenteditable language="c"> static void
-_dict_invariant (dict_t *this) {
-    REQUIRE(this != NULL);
-    REQUIRE(this-&gt;refcount &gt; 0);
-    REQUIRE(this-&gt;lock != 0);
-    REQUIRE(this-&gt;members != NULL);
-}
-                    </code></pre>
-                </section>
-
-
-                <section>
-                    <h1>Unit Testing</h1>
+                    <h2>Luis Pab&oacute;n</h2>
+                    <h3>PTL, Gluster-Swift</h3>
+                    <h3>Principal Software Engineer</h3>
                 </section>
 
                 <section>
-                    <!-- Bridge collapsing -->
-                    <img src="images/Test-First.jpg" />
-                </section>
-                <section>
-                    <h1>What exactly is a unit test?</h1>
-                </section>
-                <section>
-                    <h2>A good unit test is:</h2>
-                    <h3 class="fragment">Automated</h3>
-                    <h3 class="fragment">Consistenly returns the same result</h3>
-                    <h3 class="fragment">Runs Fast</h3>
-                    <h3 class="fragment">Readable</h3>
-                    <h3 class="fragment">Maintainable</h3>
-                    <p class="fragment"><font size="4">http://artofunittesting.com/definition-of-a-unit-test/</font></p>
+                    <img src="images/swiftstack_logo.png"  style="border: none; box-shadow: none;"/>
+                    <img src="images/swiftstack.png"  style="border: none; box-shadow: none;"/>
                 </section>
 
-                <!-- Car -->
-                <section>
-                    <h1>Example:</h1>
-                    <h1>Car</h1>
-                </section>
-                <section>
-                    <p>You could build the entire car and then test</p>
-                    <img src="images/1969-Ford-Torino-Talladega-Car-Body-Diagram.jpg" />
-                </section>
-                <section>
-                    <h3>Result could be</h3>
-                    <img src="images/pushing_the_pos_car.jpg" />
-                </section>
-                <section>
-                    <h1><i>Re-Think</i></h1>
-                    <h1><i>Development</i></h1>
-                </section>
-                <section>
-                    <h3>Break project into units to test</h3>
-                    <img src="images/HoBao.Hyper8_RTR.jpg" />
+                <section data-background="#fff">
+                    <h2>Data consumption models have changed</h2>
+                    <img src="images/data_changes.jpg"  style="border: none; box-shadow: none;"/>
                 </section>
 
-                <!-- Chair -->
-                <section>
-                    <h1>Example:</h1>
-                    <h1>Chair</h1>
-                </section>
-                <section>
-                    <img width="480" height="640" src="images/office_chair.jpg" />
-                </section>
-                <section>
-                    <h3>Possible chair test</h3>
-                    <pre><code contenteditable language="c">
-test_chair()
-{
-    assert(supports a person);
-    assert(move foard);
-    assert(move back);
-    assert(move left);
-    assert(move right);
-    assert(lean back N degrees without falling back);
-}
-                    </code></pre>
-                </section>
-                <section>
-                    <h3>Possible automated chair test</h3>
-                    <pre><code contenteditable language="c">
-// Replace human with robot
-test_chair()
-{
-    assert(robot arm push down on chair with X Newtons);
-    assert(robot arm move chair forward 0.5m);
-    assert(robot arm move chair back 0.5m);
-    assert(robot arm move chair left 0.5m);
-    assert(robot arm move chair right 0.5m);
-    assert(robot arm lean chair back 25 degrees);
-}
-                    </code></pre>
-                </section>
-                <section>
-                    <h1>Those are</h1>
-                    <h1><i>functional</i> tests,</h1>
-                    <h1>not unit tests</h1>
-                </section>
-                <section>
-                    <h3>Possible chair unit tests</h3>
-                    <pre><code contenteditable language="c">test_cushion() { ... }
-test_arm() { ... }
-test_leg() { ... }
-test_leaning_assembly { ... }
-test_lift { ... }
-test_wheel()
-{
-    Mock chair leg holding wheel();
-    exepect wheel pin to appear in Mock chair leg();
-    insert wheel into mock leg();
-
-    assert(simulate weight);
-    assert(clockwise rotation);
-    assert(counter-clockwise rotation);
-    assert(connector to mock chair leg);
-}
-
-                    </code></pre>
-                </section>
-                <section>
-                    <h2>Functional Test View</h2>
-                    <img src="images/ut_chair_notests.png" />
-                </section>
-                <section>
-                    <h2>Unit Test View</h2>
-                    <img src="images/ut_chair_utests.png" />
+                <section data-background="#fff">
+                    <h2>Parts of swift</h2>
+                    <img src="images/parts_of_swift.png" style="border: none; box-shadow: none;"/>
                 </section>
 
-
-
-                <section>
-                    <h1>Unit Test in C</h1>
+                <section data-background="#fff">
+                    <h2>Swift Use Case</h2>
+                    <img src="images/pdfcomplete_logo.png" style="border: none; box-shadow: none;"/>
                 </section>
+
+                <section data-background="#fff">
+                    <h2>Swift Use Case</h2>
+                    <img height="" src="images/pac12_logo.jpg" style="border: none; box-shadow: none;"/>
+                </section>
+
+                <section data-background="#fff">
+                    <h2>Swift Use Case</h2>
+                    <img src="images/fhcrc_logo.jpg" style="border: none; box-shadow: none;"/>
+                </section>
+
                 <section>
-                    <h2>Cmockery2</h2>
+                    <h2>integration with openstack</h2>
+                    <img src="images/openstack-software-diagram.png" style="border: none; box-shadow: none;"/>
+                </section>
+
+                <section>
+                    <h2>Swift Extensibility:</h2>
+                    <h3>API Middleware</h3>
                     <ul>
-                        <li>GitHub: <a
-                            href="https://github.com/lpabon/cmockery2">https://github.com/lpabon/cmockery2</a></li>
-                        <li>C Unit Test Framework with Mocking</li>
+                    <li>Lots of included functionality</li>
+                    <li>Transcoding</li>
+                    <li>Caching</li>
+                    <li>Search</li>
+                    <li>Compute</li>
                     </ul>
                 </section>
+
                 <section>
-                    <h2>Simple Example</h2>
-                    <pre><code contenteditable language="c">void null_test_success(void **state) {
-}
-int main(int argc, char* argv[]) {
-    const UnitTest tests[] = {
-        unit_test(null_test_success),
-    };
-    return run_tests(tests, "run");
-}</code></pre>
-                </section>
-                <section>
-                    <h2>Asserts</h2>
-                    <p>Here is an example function calling assert</p>
-                    <pre><code contenteditable language="c">#include &lt;cmockery/cmockery_override.h&gt;
-void increment_value(int * const value) {
-    assert(NULL != value);
-    (*value) ++;
-}</code></pre>
-                </section>
-                <section>
-                    <h2>Asserts</h2>
-                    <p>Here we can test the assert is triggered</p>
-                    <pre><code contenteditable language="c">void increment_value_assert(void **state) {
-    expect_assert_failure(increment_value(NULL));
-}
-int main(int argc, char *argv[]) {
-    const UnitTest tests[] = {
-        unit_test(increment_value_assert),
-    };
-    return run_tests(tests, "assert_module");
-}</code></pre>
-                </section>
-                <section>
-                    <h2>Memory Allocators</h2>
+                    <h2>Swift Extensibility:</h2>
+                    <h3>Volume Abstractions</h3>
                     <ul>
-                        <li>Overrides <code>malloc(), calloc(), free(), realloc()</code> functions</li>
-                        <li>Leak detection</li>
-                        <li>Buffer overrun</li>
-                        <li>Provided by including the file cmockery/cmockery_override.h</li>
+                    <li>Swift-on-File (n&eacute;e gluster-swift)</li>
+                    <li>Seagate Kinetic</li>
+                    <li>ZeroVM</li>
                     </ul>
                 </section>
+
                 <section>
-                    <h1>Mocking</h1>
-                    <p>Used to isolate functions</p>
-                </section>
-                <section>
-                    <h2>Mocking Example</h2>
-                    <pre><code contenteditable language="c">static int
-a(int x, int y) {
-    return double(x) + y;
-}</code></pre>
-                    <p>Place new mock <code>double()</code> in a_mock.c and build the test:</p>
-                    <pre><code contenteditable>gcc -o a_test a_test.c a.c a_mock.c</code></pre>
+                    <h2>storage policies</h2>
+                    <img src="images/storage_policies.png" />
                 </section>
 
                 <section>
-                    <p>Test</p>
-                    <pre><code contenteditable language="c">static void
-test_a( void **state ) {
-    expect_value(double, value, 2);
-    will_return(double, 4);
-    assert_int_equal(a(2, 4), 8);
-}</code></pre>
-                    <p>Mock double();</p>
-                    <pre><code contenteditable language="c">int
-double( int value ) {
-    check_expected(value);
-    return((int)mock());
-}</code></pre>
+                    <h1>GlusterFS as a Backend for Swift</h1>
                 </section>
 
                 <section>
-                    <h1>Lab</h1>
-                </section>
-                <section>
-                    <p>Download the code</p>
-                    <pre><code>$ git clone -b lab https://github.com/lpabon/cmockery2.git</code></pre>
-                    <p>Prepare the environment</p>
-                    <pre><code>$ sudo yum -y install libtool make autoconf automake gcc
-$ ./autogen.sh
-$ ./configure
-$ ./make check</code></pre>
-                </section>
-                <section>
-                    <h2>Lab 1: Add PBC to hash.c</h2>
-                    <p>Add the following include</p>
-                    <pre><code>#include &lt;cmockery/pbc.h&gt;</code></pre>
-                    <p>Add REQUIRE and ENSURE to all API functions.  Add REQUIRE() after variable initialization, and
-                    ENSURE() before last return.</p>
+                    <h2>Introduction to GlusterFS</h2>
+                    <img src="images/diagram-glusterfs.png" />
                 </section>
 
                 <section>
-                    <h2>Lab 2: Add Unit Tests to hash_create()</h2>
-                    <p>Open hash_test.c and add unit tests to hash_create().  You
-                       first may want to start by testing any REQUIRE()s.  You can
-                       then test that NULL is returned when size is less than 1. You will
-                       need to add cmockery/cmockery_override.h to hash.c.</p>
+                    <h2>Use Case:</h2>
+                    <h2>Multiple protocol access</h2>
+                    <img src="images/swift_usecase.png" />
                 </section>
 
                 <section>
-                    <h2>Lab 3: Mock strdup</h2>
-                    <p>Rename strdup to test_strdup.  Create a new file called hash_mock.c
-                    and add the mock function test_strdup to that file.  You can now use this function
-                    to test.  Check the values passed to the mock function.  By using mocks,
-                    you can now send back NULL from the mock function.
+                    <h2>April 2012</h2>
+                    <h3 class="fragment">GlusterFS patch for OpenStack Swift</h3>
+                    <h3 class="fragment">No automated testing</h3>
+                    <h3 class="fragment">0 developers on OpenStack Swift</h3>
+                    <h3 class="fragment">1 developer on patch for Swift</h3>
+                </section>
+
+                <section>
+                    <h1>Great idea,</h1>
+                    <h1>bad executio</h1>
+                    <h1 class="fragment">n</h1>
+                </section>
+
+                <section>
+                    <h2>April 2013</h2>
+                    <h3 class="fragment">gluster-swift repo</h3>
+                    <h3 class="fragment">GlusterFS as a backend to OpenStack Swift</h3>
+                    <h3 class="fragment">Full CI automated testing</h3>
+                    <h3 class="fragment">2 developers on OpenStack Swift</h3>
+                    <h3 class="fragment">6 developers on gluster-swift</h3>
+                </section>
+
+                <section>
+                    <h2>Pluggable Object Interface</h2>
+                    <p>
+                        Worked with the OpenStack Swift community to develop a pluggable interface to the object server.
+                        The interface is used by gluster-swift as well as other community members for their own backend
+                        storage systems.
                     </p>
+                    <p><font size="3">
+                        Source:
+                        <a href="https://review.openstack.org/#/c/30051/">
+                            https://review.openstack.org/#/c/30051/
+                        </a>
+                    </font></p>
+                </section>
+
+                <section>
+                    <h1>Great idea,</h1>
+                    <h1>well executed</h1>
+                </section>
+
+                <section>
+                    <h1>...but we can</h1>
+                    <h1>do better</h1>
+                </section>
+
+                <section>
+                    <h2>April 2014</h2>
+                    <h3 class="fragment">Increased participation in OpenStack Swift</h3>
+                    <h3 class="fragment">
+                        Identified gluster-swift technology is based on POSIX file semantics
+                    </h3>
+                    <h3 class="fragment">gluster-swift project renamed to <i>swiftonfile</i></h3>
+                    <h3 class="fragment">5 developers on OpenStack Swift</h3>
+                    <h3 class="fragment">3 of the developers to also work on swiftonfile</h3>
+                </section>
+
+                <section>
+                    <h2>Swiftonfile as a Storage Policy</h2>
+                    <img src="images/sp_sof.png" />
+                </section>
+
+                <section>
+                    <h2>Innovation through collaboration</h2>
+                    <blockquote cite="http://opensource.com/resources/what-open-source">
+                        <p><i>
+                            &ldquo;In general, open source projects, products, or initiatives are
+                            those that embrace and celebrate open exchange, collaborative
+                            participation, rapid prototyping, transparency, meritocracy,
+                            and community development.&rdquo;
+                        </i></p>
+                    </blockquote>
+                    <p><font size="3">
+                        Source:
+                        <a href="http://opensource.com/resources/what-open-source">
+                            http://opensource.com/resources/what-open-source
+                        </a>
+                    </font></p>
+                </section>
+
+                <section >
+                    <h2>This is as awesome as...</h2>
+                    <img src="http://mikeconley.ca/blog/wp-content/uploads/2010/08/gorilla_and_shark.png" />
+                    <p><font size="3">
+                        Credit: Christopher Hastings (
+                        <a href="http://www.drmcninja.com">http://www.drmcninja.com</a> )
+                    </font></p>
+                    <h3>Come join us</h3>
                 </section>
 
 			</div>
